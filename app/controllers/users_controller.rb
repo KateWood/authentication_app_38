@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
     @users = User.all
@@ -23,6 +23,25 @@ class UsersController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+    if @user != User.find(session[:user_id])
+      redirect_to users_path
+    end
+  end
+
+  def update
+    if @user.update_attributes(user_params)
+      redirect_to @user
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @user.destroy
+    redirect_to new_user_path
   end
 
 private
